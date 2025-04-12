@@ -3,9 +3,11 @@ import Image from "next/image";
 import logo from "@/public/logo.svg";
 import Button from "./Button";
 import { useRouter } from "next/router";
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 
 function Navbar() {
   const router = useRouter();
+  const address = useAddress();
 
   return (
     <NavbarSection>
@@ -42,6 +44,7 @@ function Navbar() {
           Basketball
         </Button>
       </LinksContainer>
+      <ConnectWallet />
     </NavbarSection>
   );
 }

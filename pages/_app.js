@@ -2,6 +2,7 @@ import { createGlobalStyle } from "styled-components";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "@/context/ThemeContext";
 import Head from "next/head";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
 
 export const GlobalStyles = createGlobalStyle`
 * {
@@ -31,16 +32,12 @@ export const GlobalStyles = createGlobalStyle`
 export default function App({ Component, pageProps }) {
   return (
     <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
       <GlobalStyles />
-      <ThemeProvider>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <ThirdwebProvider activeChain="binance-testnet" clientId={process.env.THIRDWEB_CLIENT_ID}>
+        <ThemeProvider>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </ThirdwebProvider>
       <ToastContainer position="top-right" autoClose={8000} />
     </>
   );
