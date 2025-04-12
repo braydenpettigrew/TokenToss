@@ -17,6 +17,7 @@ function Navbar() {
       </LogoContainer>
       <LinksContainer>
         <Button
+          onClick={() => router.push("/my-bets")}
           padding="8px"
           backgroundColor="transparent"
           hoverBackgroundColor="transparent"
@@ -26,6 +27,7 @@ function Navbar() {
           My Bets
         </Button>
         <Button
+          onClick={() => router.push("/baseball")}
           padding="8px"
           backgroundColor="transparent"
           hoverBackgroundColor="transparent"
@@ -35,6 +37,7 @@ function Navbar() {
           Baseball
         </Button>
         <Button
+          onClick={() => router.push("/basketball")}
           padding="8px"
           backgroundColor="transparent"
           hoverBackgroundColor="transparent"
