@@ -1,7 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "@/context/ThemeContext";
-import Head from "next/head";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 
 export const GlobalStyles = createGlobalStyle`
@@ -33,7 +32,10 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyles />
-      <ThirdwebProvider activeChain="binance-testnet" clientId={process.env.THIRDWEB_CLIENT_ID}>
+      <ThirdwebProvider
+        activeChain="binance-testnet"
+        clientId="1389ca3b01ca9a4aa7e91ad4c9eccf97"
+      >
         <ThemeProvider>
           <Component {...pageProps} />
         </ThemeProvider>
