@@ -33,7 +33,7 @@ export default function App({ Component, pageProps }) {
     <>
       <GlobalStyles />
       <ThirdwebProvider
-        activeChain="binance-testnet"
+        desiredChainId={97}
         clientId="1389ca3b01ca9a4aa7e91ad4c9eccf97"
       >
         <ThemeProvider>

@@ -3,11 +3,7 @@ import Image from "next/image";
 import logo from "@/public/logo.svg";
 import Button from "./Button";
 import { useRouter } from "next/router";
-import {
-  ConnectWallet,
-  useAddress,
-  useSigner,
-} from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress, useSigner } from "@thirdweb-dev/react";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import BraydenTokenABI from "@/contracts/abi/BraydenTokenABI.json";
@@ -35,6 +31,7 @@ function Navbar() {
           BraydenTokenABI,
           signer
         );
+
         const balance = await tokenContract.balanceOf(address);
         const decimals = await tokenContract.decimals();
         const symbol = await tokenContract.symbol();
@@ -49,6 +46,28 @@ function Navbar() {
 
     fetchTokenBalance();
   }, [address, signer]);
+
+  const mintBraydenToken = async () => {
+    if (!signer) {
+      console.error("Signer is not available");
+      return;
+    }
+
+    try {
+      const tokenContract = new ethers.Contract(
+        tokenContractAddress,
+        BraydenTokenABI,
+        signer // Only the owner (me) can mint tokens
+      );
+      const tx = await tokenContract.mint(
+        address,
+        ethers.utils.parseUnits("1000", 18)
+      );
+      await tx.wait();
+    } catch (error) {
+      console.error("Error minting tokens:", error);
+    }
+  };
 
   return (
     <NavbarSection>
@@ -89,9 +108,19 @@ function Navbar() {
         </Button>
       </LinksContainer>
       <WalletInfo>
+        <Button
+          onClick={mintBraydenToken}
+          padding="8px"
+          backgroundColor="transparent"
+          hoverBackgroundColor="transparent"
+          textColor={({ theme }) => theme.primaryLight}
+          hoverTextColor={({ theme }) => theme.primaryDark}
+        >
+          Mint Tokens
+        </Button>
         {address && !isLoading && (
           <p>
-            BraydenToken: {tokenBalance?.displayValue} {tokenBalance?.symbol}
+            {tokenBalance?.displayValue} {tokenBalance?.symbol}
           </p>
         )}
         <ConnectWallet />
