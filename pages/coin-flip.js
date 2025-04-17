@@ -169,8 +169,6 @@ const CoinSide = styled.div`
   color: #333;
   font-size: ${({ theme }) => theme.fontSize.subheading};
   border: 8px solid #a8a8a8;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 0 8px rgba(0, 0, 0, 0.1);
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
 `;
 
 const StaticCoin = styled.div`
@@ -185,6 +183,4 @@ const StaticCoin = styled.div`
   color: #333;
   font-size: ${({ theme }) => theme.fontSize.subheading};
   border: 8px solid #a8a8a8;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), inset 0 0 8px rgba(0, 0, 0, 0.1);
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
 `;
