@@ -77,34 +77,24 @@ function Navbar() {
       </LogoContainer>
       <LinksContainer>
         <Button
-          onClick={() => router.push("/my-bets")}
+          onClick={() => router.push("/war")}
           padding="8px"
           backgroundColor="transparent"
           hoverBackgroundColor="transparent"
           textColor={({ theme }) => theme.primaryLight}
           hoverTextColor={({ theme }) => theme.primaryDark}
         >
-          My Bets
+          War
         </Button>
         <Button
-          onClick={() => router.push("/baseball")}
+          onClick={() => router.push("/coin-flip")}
           padding="8px"
           backgroundColor="transparent"
           hoverBackgroundColor="transparent"
           textColor={({ theme }) => theme.primaryLight}
           hoverTextColor={({ theme }) => theme.primaryDark}
         >
-          Baseball
-        </Button>
-        <Button
-          onClick={() => router.push("/basketball")}
-          padding="8px"
-          backgroundColor="transparent"
-          hoverBackgroundColor="transparent"
-          textColor={({ theme }) => theme.primaryLight}
-          hoverTextColor={({ theme }) => theme.primaryDark}
-        >
-          Basketball
+          Coin Flip
         </Button>
       </LinksContainer>
       <WalletInfo>

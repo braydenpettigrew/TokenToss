@@ -1,7 +1,5 @@
-import Button from "@/components/Button";
 import PageContainer from "@/components/PageContainer";
 import { useTheme } from "@/context/ThemeContext";
-import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
@@ -12,32 +10,32 @@ export default function Home() {
   return (
     <PageContainer>
       <Container>
-        <Heading>
-          Welcome to <HighlightedText>TokenToss</HighlightedText>
-        </Heading>
-        <Subheading>
-          The one-stop solution for losing all of your money and becoming
-          financially unstable.
-        </Subheading>
-        <HorizontalLine />
-        <Subheading>
-          The best part? <HighlightedText>No middlemen.</HighlightedText>
-        </Subheading>
-        <Subheading>
-          Gambling problem? <HighlightedText>No problem.</HighlightedText>
-        </Subheading>
-        <Subheading>
-          Not convinced? <HighlightedText>Grab a beer and come back.</HighlightedText>
-        </Subheading>
-        <Button
-        onClick={() => {router.push("/my-bets")}}
-          backgroundColor={theme.accent}
-          textColor={theme.background}
-          marginTop="32px"
-        >
-          Sounds Great!
-          <ArrowRight />
-        </Button>
+        <TextContainer>
+          <Heading>
+            Welcome to <HighlightedText>TokenToss</HighlightedText>
+          </Heading>
+          <Subheading>
+            The one-stop solution for losing all of your money and becoming
+            financially unstable.
+          </Subheading>
+          <HorizontalLine />
+          <Subheading>
+            The best part? <HighlightedText>No middlemen.</HighlightedText>
+          </Subheading>
+          <Subheading>
+            Gambling problem? <HighlightedText>No problem.</HighlightedText>
+          </Subheading>
+          <Subheading>
+            Not convinced?{" "}
+            <HighlightedText>Grab a beer and come back.</HighlightedText>
+          </Subheading>
+        </TextContainer>
+        <GameCardsContainer>
+          <GameCard onClick={() => router.push("/coin-flip")}>
+            Coin Flip
+          </GameCard>
+          <GameCard onClick={() => router.push("/war")}>War</GameCard>
+        </GameCardsContainer>
       </Container>
     </PageContainer>
   );
@@ -49,6 +47,16 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   flex-grow: 1;
+  padding: 32px;
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 `;
 
 const Heading = styled.h1`
@@ -72,4 +80,31 @@ const HorizontalLine = styled.div`
   height: 1px;
   background-color: ${({ theme }) => theme.shadow};
   margin: 16px;
+`;
+
+const GameCardsContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  width: 100%;
+  gap: 16px;
+`;
+
+const GameCard = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.background};
+  color: ${({ theme }) => theme.accent};
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0px 4px 8px ${({ theme }) => theme.shadow};
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    cursor: pointer;
+  }
 `;
