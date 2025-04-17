@@ -1,10 +1,11 @@
+import Heading from "@/components/Heading";
+import HighlightedText from "@/components/HighlightedText";
 import PageContainer from "@/components/PageContainer";
-import { useTheme } from "@/context/ThemeContext";
+import Subheading from "@/components/Subheading";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
 export default function Home() {
-  const theme = useTheme();
   const router = useRouter();
 
   return (
@@ -57,22 +58,6 @@ const TextContainer = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-`;
-
-const Heading = styled.h1`
-  font-size: ${({ theme }) => theme.fontSize.xlheading};
-  color: ${({ theme }) => theme.accent};
-  text-shadow: 1px 1px 2px ${({ theme }) => theme.shadow};
-`;
-
-const Subheading = styled.h2`
-  font-size: ${({ theme }) => theme.fontSize.subheading};
-  color: ${({ theme }) => theme.accent};
-`;
-
-const HighlightedText = styled.span`
-  color: ${({ theme }) => theme.primaryLight};
-  font-weight: bold;
 `;
 
 const HorizontalLine = styled.div`
