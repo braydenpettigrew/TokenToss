@@ -1,14 +1,22 @@
 import styled from "styled-components";
 import { Heart, Spade, Club, Diamond } from "lucide-react";
 
-const PlayingCard = ({ value, suit }) => {
+const PlayingCard = ({ value, suit, faceDown }) => {
+  if (faceDown) {
+    return <CardBack />;
+  }
+
   return (
     <Card>
-      {value}
-      {suit === "hearts" && <Heart />}
+      {value === 1 && <span>A</span>}
+      {value === 11 && <span>J</span>}
+      {value === 12 && <span>Q</span>}
+      {value === 13 && <span>K</span>}
+      {value > 1 && value < 11 && <span>{value}</span>}
+      {suit === "hearts" && <Heart color="red" />}
+      {suit === "diamonds" && <Diamond color="red" />}
       {suit === "spades" && <Spade />}
       {suit === "clubs" && <Club />}
-      {suit === "diamonds" && <Diamond />}
     </Card>
   );
 };
@@ -23,10 +31,19 @@ const Card = styled.div`
   padding: 16px;
   border-radius: 8px;
   border: 2px solid ${({ theme }) => theme.primaryLight};
-  box-shadow: 4px 4x 4px ${({ theme }) => theme.shadow};
-  width: 150px;
-  height: 200px;
+  width: 250px;
+  height: 350px;
   gap: 8px;
+`;
+
+const CardBack = styled.div`
+  display: flex;
+  background-color: ${({ theme }) => theme.primaryDark};
+  border-radius: 8px;
+  border: 2px solid ${({ theme }) => theme.primaryLight};
+  box-shadow: 4px 4x 4px ${({ theme }) => theme.shadow};
+  width: 250px;
+  height: 350px;
 `;
 
 export default PlayingCard;

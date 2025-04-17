@@ -39,8 +39,8 @@ export default Button;
 
 const StyledButton = styled.button`
   padding: ${(props) => props.$padding};
-  background-color: ${(props) => props.$backgroundColor || props.theme.primary};
-  color: ${(props) => props.$textColor || props.theme.white};
+  background-color: ${(props) => props.$backgroundColor || props.theme.primaryLight};
+  color: ${(props) => props.$textColor || props.theme.black};
   font-weight: ${(props) => (props.$bold ? "bold" : "normal")};
   border: none;
   border-radius: 5px;
@@ -53,9 +53,9 @@ const StyledButton = styled.button`
   gap: 8px;
 
   &:hover {
-    color: ${(props) => props.$hoverTextColor || props.theme.black};
+    color: ${(props) => props.$hoverTextColor || props.theme.white};
     background-color: ${(props) =>
-      props.$hoverBackgroundColor || props.theme.primary};
+      props.$hoverBackgroundColor || props.theme.primaryDark};
     transform: scale(0.98);
   }
 
