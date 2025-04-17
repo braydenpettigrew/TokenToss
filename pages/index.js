@@ -4,8 +4,9 @@ import PageContainer from "@/components/PageContainer";
 import Subheading from "@/components/Subheading";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import Image from "next/image"; // Import the Image component
-import war from "@/public/war.png"; // Import the war.png image
+import Image from "next/image";
+import war from "@/public/war.png";
+import coinflip from "@/public/coinflip.png";
 
 export default function Home() {
   const router = useRouter();
@@ -34,12 +35,13 @@ export default function Home() {
           </Subheading>
         </TextContainer>
         <GameCardsContainer>
-          <GameCard onClick={() => router.push("/coin-flip")}>
-            Coin Flip
-          </GameCard>
           <GameCard onClick={() => router.push("/war")}>
             <StyledImage src={war} alt="War Game" fill />
             <GameTitle>War</GameTitle>
+          </GameCard>
+          <GameCard onClick={() => router.push("/coin-flip")}>
+            <StyledImage src={coinflip} alt="War Game" fill />
+            <GameTitle>Coin Flip</GameTitle>
           </GameCard>
         </GameCardsContainer>
       </Container>

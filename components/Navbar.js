@@ -98,7 +98,7 @@ function Navbar() {
         </Button>
       </LinksContainer>
       <WalletInfo>
-        <Button
+        {/* <Button
           onClick={mintBraydenToken}
           padding="8px"
           backgroundColor="transparent"
@@ -107,7 +107,7 @@ function Navbar() {
           hoverTextColor={({ theme }) => theme.primaryDark}
         >
           Mint Tokens
-        </Button>
+        </Button> */}
         {address && !isLoading && (
           <p>
             {tokenBalance?.displayValue} {tokenBalance?.symbol}
