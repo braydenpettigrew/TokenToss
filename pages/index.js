@@ -4,6 +4,8 @@ import PageContainer from "@/components/PageContainer";
 import Subheading from "@/components/Subheading";
 import { useRouter } from "next/router";
 import styled from "styled-components";
+import Image from "next/image"; // Import the Image component
+import war from "@/public/war.png"; // Import the war.png image
 
 export default function Home() {
   const router = useRouter();
@@ -35,7 +37,10 @@ export default function Home() {
           <GameCard onClick={() => router.push("/coin-flip")}>
             Coin Flip
           </GameCard>
-          <GameCard onClick={() => router.push("/war")}>War</GameCard>
+          <GameCard onClick={() => router.push("/war")}>
+            <StyledImage src={war} alt="War Game" fill />
+            <GameTitle>War</GameTitle>
+          </GameCard>
         </GameCardsContainer>
       </Container>
     </PageContainer>
@@ -87,9 +92,31 @@ const GameCard = styled.div`
   padding: 16px;
   box-shadow: 0px 4px 8px ${({ theme }) => theme.shadow};
   transition: transform 0.2s;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
     transform: translateY(-4px);
     cursor: pointer;
   }
+`;
+
+const StyledImage = styled(Image)`
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 0;
+`;
+
+const GameTitle = styled.div`
+  position: relative;
+  z-index: 1;
+  font-size: ${({ theme }) => theme.fontSize.subheading};
+  font-weight: bold;
+  color: ${({ theme }) => theme.primaryLight};
+  padding: 16px;
+  border-radius: 8px;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
 `;
