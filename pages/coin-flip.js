@@ -32,7 +32,6 @@ export default function CoinFlip() {
     }
 
     try {
-      // Create a contract instance
       const contract = new ethers.Contract(
         contractAddress,
         BraydenTokenABI,
@@ -52,8 +51,10 @@ export default function CoinFlip() {
       // Start animation
       setIsFlipping(true);
 
-      // Execute the actual transaction
-      const tx = await contract.flipCoin(betAmountInWei, choice === "heads");
+      // Execute contract function
+      const tx = await contract.flipCoin(betAmountInWei, choice === "heads", {
+        gasLimit: 300000,
+      });
       const receipt = await tx.wait();
 
       // Fetch the updated token balance

@@ -47,28 +47,6 @@ function Navbar() {
     fetchTokenBalance();
   }, [address, signer]);
 
-  const mintBraydenToken = async () => {
-    if (!signer) {
-      console.error("Signer is not available");
-      return;
-    }
-
-    try {
-      const tokenContract = new ethers.Contract(
-        contractAddress,
-        BraydenTokenABI,
-        signer // Only the owner (me) can mint tokens
-      );
-      const tx = await tokenContract.mint(
-        address,
-        ethers.utils.parseUnits("1000", 18)
-      );
-      await tx.wait();
-    } catch (error) {
-      console.error("Error minting tokens:", error);
-    }
-  };
-
   return (
     <NavbarSection>
       <LogoContainer onClick={() => router.push("/")}>
@@ -98,16 +76,6 @@ function Navbar() {
         </Button>
       </LinksContainer>
       <WalletInfo>
-        {/* <Button
-          onClick={mintBraydenToken}
-          padding="8px"
-          backgroundColor="transparent"
-          hoverBackgroundColor="transparent"
-          textColor={({ theme }) => theme.primaryLight}
-          hoverTextColor={({ theme }) => theme.primaryDark}
-        >
-          Mint Tokens
-        </Button> */}
         {address && !isLoading && (
           <p>
             {tokenBalance?.displayValue} {tokenBalance?.symbol}

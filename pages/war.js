@@ -39,7 +39,6 @@ export default function MyBets() {
     }
 
     try {
-      // Create a contract instance
       const contract = new ethers.Contract(
         contractAddress,
         BraydenTokenABI,
@@ -60,7 +59,9 @@ export default function MyBets() {
       setIsDealing(true);
       setDealerCardMoving(true);
       setPlayerCardMoving(true);
-      const tx = await contract.playWar(betAmountInWei);
+      const tx = await contract.playWar(betAmountInWei, {
+        gasLimit: 300000,
+      });
       const receipt = await tx.wait();
 
       // Fetch the updated token balance
