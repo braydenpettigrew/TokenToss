@@ -18,8 +18,7 @@ export default function CoinFlip() {
   const [gameResult, setGameResult] = useState(null);
   const signer = useSigner();
   const address = useAddress();
-  const contractAddress = "0x426191cfb85F598E38eAe207EfC9AFb17d73da53";
-  const { setTokenBalance } = useTokenBalance();
+  const { setTokenBalance, contractAddress } = useTokenBalance();
 
   const handleFlip = async (choice) => {
     if (betAmount <= 0) {
@@ -40,7 +39,7 @@ export default function CoinFlip() {
         signer
       );
 
-      // Convert bet amount to the appropriate token decimals (assuming 18 decimals)
+      // Convert bet amount to the appropriate token decimals
       const betAmountInWei = ethers.utils.parseUnits(betAmount.toString(), 18);
 
       // Check user's token balance
@@ -56,8 +55,6 @@ export default function CoinFlip() {
       // Execute the actual transaction
       const tx = await contract.flipCoin(betAmountInWei, choice === "heads");
       const receipt = await tx.wait();
-
-      console.log("Transaction receipt:", receipt);
 
       // Fetch the updated token balance
       const balance = await contract.balanceOf(address);
@@ -110,7 +107,7 @@ export default function CoinFlip() {
               : gameResult === "lose"
               ? "You lose!"
               : gameResult === "error"
-              ? "Error, try again"
+              ? "Error, try again!"
               : ""}
           </Text>
           <CoinContainer>
@@ -189,6 +186,7 @@ const HorizontalContainer = styled.div`
   justify-content: center;
   gap: 16px;
 `;
+
 const BetInput = styled.input`
   width: 150px;
   padding: 8px;

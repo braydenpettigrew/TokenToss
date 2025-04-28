@@ -7,6 +7,11 @@ import Subheading from "@/components/Subheading";
 import HighlightedText from "@/components/HighlightedText";
 import Button from "@/components/Button";
 import { useState } from "react";
+import { ethers } from "ethers";
+import BraydenTokenABI from "@/contracts/abi/BraydenTokenABI.json";
+import { toast } from "react-toastify";
+import { useAddress, useSigner } from "@thirdweb-dev/react";
+import { useTokenBalance } from "@/context/TokenBalanceContext";
 
 export default function MyBets() {
   const [playerValue, setPlayerValue] = useState(null);
@@ -17,30 +22,90 @@ export default function MyBets() {
   const [isDealing, setIsDealing] = useState(false);
   const [dealerCardMoving, setDealerCardMoving] = useState(false);
   const [playerCardMoving, setPlayerCardMoving] = useState(false);
+  const [gameResult, setGameResult] = useState(null);
+  const signer = useSigner();
+  const address = useAddress();
+  const { setTokenBalance, contractAddress } = useTokenBalance();
 
-  const handleDeal = () => {
-    // Simulate dealing cards
-    const suits = ["hearts", "diamonds", "clubs", "spades"];
-    const playerCard = Math.floor(Math.random() * 13) + 1;
-    const dealerCard = Math.floor(Math.random() * 13) + 1;
-    const playerSuit = suits[Math.floor(Math.random() * suits.length)];
-    const dealerSuit = suits[Math.floor(Math.random() * suits.length)];
+  const handleDeal = async () => {
+    if (betAmount <= 0) {
+      toast.error("Please enter a valid bet amount!");
+      return;
+    }
 
-    // Start the dealing animation
-    setIsDealing(true);
-    setDealerCardMoving(true);
-    setPlayerCardMoving(true);
+    if (!signer) {
+      toast.error("Please connect your wallet!");
+      return;
+    }
 
-    // Simulate the delay for the card movement
-    setTimeout(() => {
-      setDealerCardMoving(false);
-      setDealerValue(dealerCard);
-      setDealerSuit(dealerSuit);
-      setPlayerCardMoving(false);
-      setPlayerValue(playerCard);
-      setPlayerSuit(playerSuit);
+    try {
+      // Create a contract instance
+      const contract = new ethers.Contract(
+        contractAddress,
+        BraydenTokenABI,
+        signer
+      );
+
+      // Convert bet amount to the appropriate token decimals
+      const betAmountInWei = ethers.utils.parseUnits(betAmount.toString(), 18);
+
+      // Check user's token balance
+      const userBalance = await contract.balanceOf(address);
+      if (userBalance.lt(betAmountInWei)) {
+        toast.error("Insufficient token balance to place the bet.");
+        return;
+      }
+
+      // Execute the playWar transaction
+      setIsDealing(true);
+      setDealerCardMoving(true);
+      setPlayerCardMoving(true);
+      const tx = await contract.playWar(betAmountInWei);
+      const receipt = await tx.wait();
+
+      // Fetch the updated token balance
+      const balance = await contract.balanceOf(address);
+      const decimals = await contract.decimals();
+      const symbol = await contract.symbol();
+      const displayValue = ethers.utils.formatUnits(balance, decimals);
+      setTokenBalance({ displayValue, symbol });
+
+      // Extract the WarGameResult event
+      const warGameEvent = receipt.events.find(
+        (event) => event.event === "WarGameResult"
+      );
+
+      if (warGameEvent) {
+        const { playerCard, dealerCard, playerSuit, dealerSuit, playerWon } =
+          warGameEvent.args;
+
+        // Update the frontend state with the game results
+        setPlayerValue(playerCard.toNumber());
+        setDealerValue(dealerCard.toNumber());
+        setPlayerSuit(getSuitName(playerSuit.toNumber()));
+        setDealerSuit(getSuitName(dealerSuit.toNumber()));
+
+        if (playerWon) {
+          setGameResult("You win!");
+        } else {
+          setGameResult("You lose!");
+        }
+      }
+    } catch (error) {
+      console.error("Error during the War game:", error);
+      toast.error("An error occurred. Please try again.");
+      setGameResult("Error, try again!");
+    } finally {
       setIsDealing(false);
-    }, 1000);
+      setDealerCardMoving(false);
+      setPlayerCardMoving(false);
+    }
+  };
+
+  // Helper function to map suit numbers to suit names
+  const getSuitName = (suitNumber) => {
+    const suits = ["hearts", "diamonds", "clubs", "spades"];
+    return suits[suitNumber];
   };
 
   return (
@@ -57,6 +122,7 @@ export default function MyBets() {
           </Subheading>
         </TextContainer>
         <GameContainer>
+          <Text>{isDealing ? "Dealing cards..." : gameResult}</Text>
           <GameCardsContainer>
             <HorizontalContainer>
               <DeckContainer>
@@ -98,10 +164,15 @@ export default function MyBets() {
               type="number"
               placeholder="Bet Amount"
               min="0"
-              max="10000"
               step="1"
               value={betAmount}
-              onChange={(e) => setBetAmount(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "" || /^[0-9]+$/.test(value)) {
+                  // only allow whole numbers
+                  setBetAmount(value);
+                }
+              }}
             />
             <Button onClick={handleDeal} disabled={isDealing}>
               Deal
@@ -159,9 +230,12 @@ const HorizontalContainer = styled.div`
 `;
 
 const BetInput = styled.input`
+  width: 150px;
   padding: 8px;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.shadow};
+  text-align: center;
+  font-size: ${({ theme }) => theme.fontSize.default};
 `;
 
 const CardSlot = styled.div`
@@ -235,4 +309,10 @@ const RevealedCard = styled.div`
   justify-content: center;
   align-items: center;
   animation: ${flipCard} 0.5s ease forwards;
+`;
+
+const Text = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.subheading};
+  font-weight: bold;
+  color: ${({ theme }) => theme.primaryLight};
 `;

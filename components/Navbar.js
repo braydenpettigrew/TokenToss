@@ -14,8 +14,7 @@ function Navbar() {
   const address = useAddress();
   const signer = useSigner();
   const [isLoading, setIsLoading] = useState(true);
-  const contractAddress = "0x426191cfb85F598E38eAe207EfC9AFb17d73da53";
-  const { tokenBalance, setTokenBalance } = useTokenBalance();
+  const { tokenBalance, setTokenBalance, contractAddress } = useTokenBalance();
 
   // Fetch the user's BraydenToken balance
   useEffect(() => {
