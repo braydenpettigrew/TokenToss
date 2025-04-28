@@ -43,7 +43,7 @@ export default function App({ Component, pageProps }) {
           </TokenBalanceProvider>
         </ThemeProvider>
       </ThirdwebProvider>
-      <ToastContainer position="top-right" autoClose={8000} />
+      <ToastContainer position="top-right" autoClose={5000} />
     </>
   );
 }

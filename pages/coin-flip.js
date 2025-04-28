@@ -9,6 +9,7 @@ import { ethers } from "ethers";
 import BraydenTokenABI from "@/contracts/abi/BraydenTokenABI.json";
 import { useAddress, useSigner } from "@thirdweb-dev/react";
 import { useTokenBalance } from "@/context/TokenBalanceContext";
+import { toast } from "react-toastify";
 
 export default function CoinFlip() {
   const [betAmount, setBetAmount] = useState(0);
@@ -22,12 +23,12 @@ export default function CoinFlip() {
 
   const handleFlip = async (choice) => {
     if (betAmount <= 0) {
-      alert("Please enter a valid bet amount!");
+      toast.error("Please enter a valid bet amount!");
       return;
     }
 
     if (!signer) {
-      alert("Please connect your wallet!");
+      toast.error("Please connect your wallet!");
       return;
     }
 
@@ -45,7 +46,7 @@ export default function CoinFlip() {
       // Check user's token balance
       const userBalance = await contract.balanceOf(address);
       if (userBalance.lt(betAmountInWei)) {
-        alert("Insufficient token balance to place the bet.");
+        toast.error("Insufficient token balance to place the bet.");
         return;
       }
 
@@ -82,9 +83,7 @@ export default function CoinFlip() {
       console.error("Error during coin flip:", error);
       setCoinResult("FLIP ME");
       setGameResult("error");
-      if (error.reason) {
-        alert(`Transaction failed: ${error.reason}`);
-      }
+      toast.error("An error occurred during the coin flip. Please try again.");
     } finally {
       setIsFlipping(false);
     }
@@ -133,10 +132,14 @@ export default function CoinFlip() {
               type="number"
               placeholder="Bet Amount"
               min="0"
-              max="10000"
               step="1"
               value={betAmount}
-              onChange={(e) => setBetAmount(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "" || /^[0-9]+$/.test(value)) { // only allow whole numbers
+                  setBetAmount(value);
+                }
+              }}
             />
             <Button onClick={() => handleFlip("heads")} disabled={isFlipping}>
               Heads
@@ -186,11 +189,13 @@ const HorizontalContainer = styled.div`
   justify-content: center;
   gap: 16px;
 `;
-
 const BetInput = styled.input`
+  width: 150px;
   padding: 8px;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.shadow};
+  text-align: center;
+  font-size: ${({ theme }) => theme.fontSize.default};
 `;
 
 const CoinContainer = styled.div`
