@@ -7,14 +7,15 @@ import { ConnectWallet, useAddress, useSigner } from "@thirdweb-dev/react";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import BraydenTokenABI from "@/contracts/abi/BraydenTokenABI.json";
+import { useTokenBalance } from "@/context/TokenBalanceContext";
 
 function Navbar() {
   const router = useRouter();
   const address = useAddress();
   const signer = useSigner();
-  const [tokenBalance, setTokenBalance] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const tokenContractAddress = "0x0013610D45E94aCc701fb8aFF1FC7f45b54D0d03";
+  const contractAddress = "0x426191cfb85F598E38eAe207EfC9AFb17d73da53";
+  const { tokenBalance, setTokenBalance } = useTokenBalance();
 
   // Fetch the user's BraydenToken balance
   useEffect(() => {
@@ -27,7 +28,7 @@ function Navbar() {
 
       try {
         const tokenContract = new ethers.Contract(
-          tokenContractAddress,
+          contractAddress,
           BraydenTokenABI,
           signer
         );
@@ -55,7 +56,7 @@ function Navbar() {
 
     try {
       const tokenContract = new ethers.Contract(
-        tokenContractAddress,
+        contractAddress,
         BraydenTokenABI,
         signer // Only the owner (me) can mint tokens
       );

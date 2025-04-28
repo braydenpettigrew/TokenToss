@@ -2,6 +2,7 @@ import { createGlobalStyle } from "styled-components";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
+import { TokenBalanceProvider } from "@/context/TokenBalanceContext";
 
 export const GlobalStyles = createGlobalStyle`
 * {
@@ -37,7 +38,9 @@ export default function App({ Component, pageProps }) {
         clientId="1389ca3b01ca9a4aa7e91ad4c9eccf97"
       >
         <ThemeProvider>
-          <Component {...pageProps} />
+          <TokenBalanceProvider>
+            <Component {...pageProps} />
+          </TokenBalanceProvider>
         </ThemeProvider>
       </ThirdwebProvider>
       <ToastContainer position="top-right" autoClose={8000} />

@@ -8,6 +8,10 @@ import {ERC20Burnable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC2
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract BraydenToken is ERC20, Ownable, ERC20Permit, ERC20Burnable {
+     // Define the CoinFlip event
+    event CoinFlipResult(address indexed player, uint256 betAmount, bool isHeads, uint result, bool playerWon);
+    
+
     constructor(address recipient, address initialOwner)
         ERC20("BraydenToken", "BTN")
         Ownable(initialOwner)
@@ -25,12 +29,21 @@ contract BraydenToken is ERC20, Ownable, ERC20Permit, ERC20Burnable {
     // Function to generate a pseudo-random number 0 or 1
     // 0 = heads
     // 1 = tails
-    function random() public view returns(uint) {
-        return uint(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % 2;
-    }
+    function random() public view returns (uint) {
+    return uint(
+        keccak256(
+            abi.encodePacked(
+                block.prevrandao,
+                block.timestamp,
+                blockhash(block.number - 1),
+                msg.sender
+            )
+        )
+    ) % 2;
+}
 
     // Function to determine if the player won (example: if random() = 0 and choice = heads, player wins)
-    function flipCoin(uint256 betAmount, bool isHeads) public returns (bool, uint) {
+    function flipCoin(uint256 betAmount, bool isHeads) public {
         // Check if the player has enough tokens to bet
         require(balanceOf(msg.sender) >= betAmount, "Insufficient balance");
         require(betAmount > 0, "Bet amount must be greater than 0");
@@ -46,7 +59,9 @@ contract BraydenToken is ERC20, Ownable, ERC20Permit, ERC20Burnable {
             mint(msg.sender, betAmount * 2);
         }
         
-        return (playerWon, result);
+        // Emit the event with all relevant information
+        emit CoinFlipResult(msg.sender, betAmount, isHeads, result, playerWon);
+    
     }
 
 }
