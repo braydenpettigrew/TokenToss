@@ -74,12 +74,12 @@ export default function CoinFlip() {
 
         // Update UI based on actual blockchain result
         setCoinResult(result.toNumber() === 0 ? "heads" : "tails");
-        setGameResult(playerWon ? "win" : "lose");
+        setGameResult(playerWon ? "You win!" : "You lose!");
       }
     } catch (error) {
       console.error("Error during coin flip:", error);
       setCoinResult("FLIP ME");
-      setGameResult("error");
+      setGameResult("Error, try again!");
       toast.error("An error occurred during the coin flip. Please try again.");
     } finally {
       setIsFlipping(false);
@@ -99,17 +99,7 @@ export default function CoinFlip() {
           </Subheading>
         </TextContainer>
         <GameContainer>
-          <Text>
-            {isFlipping
-              ? "Flipping the coin..."
-              : gameResult === "win"
-              ? "You win!"
-              : gameResult === "lose"
-              ? "You lose!"
-              : gameResult === "error"
-              ? "Error, try again!"
-              : ""}
-          </Text>
+          <Text>{isFlipping ? "Flipping the coin..." : gameResult}</Text>
           <CoinContainer>
             {isFlipping ? (
               <CoinWrapper>
@@ -133,7 +123,8 @@ export default function CoinFlip() {
               value={betAmount}
               onChange={(e) => {
                 const value = e.target.value;
-                if (value === "" || /^[0-9]+$/.test(value)) { // only allow whole numbers
+                if (value === "" || /^[0-9]+$/.test(value)) {
+                  // only allow whole numbers
                   setBetAmount(value);
                 }
               }}
